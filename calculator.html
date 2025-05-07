@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Modern Calculator</title>
+  <style>
+    body {
+      background-color: #f8f3ed;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+
+    .calculator {
+      background: #f8f3ed;
+      border-radius: 20px;
+      padding: 20px;
+      width: 320px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .display {
+      background: #eae4d9;
+      height: 60px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 24px;
+      text-align: left;
+      overflow-x: auto;
+      word-wrap: break-word;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      padding: 20px;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      background-color: #f3f0eb;
+      color: #222;
+      cursor: pointer;
+      transition: transform 0.1s ease-out;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    button.operator {
+      background-color: #f8dab3;
+    }
+
+    button.equal {
+      background-color: #f8dab3;
+    }
+
+    button.ac {
+      background-color: #fbd8b0;
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    button.clicked {
+      transform: scale(0.95);
+    }
+
+    button.wide {
+      border-radius: 30px;
+      grid-column: span 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="ac" onclick="clearDisplay()">AC</button>
+      <button class="operator" onclick="appendValue('()')">( )</button>  <!-- Added operator class here -->
+      <button class="operator" onclick="appendValue('%')">%</button>
+      <button class="operator" onclick="appendValue('/')">÷</button>
+
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button class="operator" onclick="appendValue('*')">×</button>
+
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('6')">6</button>
+      <button class="operator" onclick="appendValue('-')">−</button>
+
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('3')">3</button>
+      <button class="operator" onclick="appendValue('+')">+</button>
+
+      <button onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('.')">.</button>
+      <button onclick="backspace()">⌫</button>
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById('display');
+    let expression = '';
+
+    function appendValue(value) {
+      if (display.innerText === '0' || display.innerText === 'Error') {
+        expression = value;
+      } else {
+        expression += value;
+      }
+      display.innerText = expression;
+    }
+
+    function clearDisplay() {
+      expression = '';
+      display.innerText = '0';
+    }
+
+    function backspace() {
+      expression = expression.slice(0, -1);
+      display.innerText = expression || '0';
+    }
+
+    function calculate() {
+      try {
+        expression = eval(expression).toString();
+        display.innerText = expression;
+      } catch {
+        display.innerText = 'Error';
+      }
+    }
+
+    // Add click feedback effect
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.add('clicked');
+        setTimeout(() => btn.classList.remove('clicked'), 100);  // Shorter duration for quicker effect
+      });
+    });
+  </script>
+</body>
+</html>
