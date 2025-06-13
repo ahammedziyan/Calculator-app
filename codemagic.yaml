@@ -1,22 +1,19 @@
-
-
-
-
 workflows:
-  android-workflow:
+  cordova-android:
     name: Cordova Android Build
     environment:
-      vars:
-        PACKAGE_NAME: "com.example.calculator"
-      node: latest
+      node: 18
+      java: 17
     scripts:
-      - npm install -g cordova
-      - cordova platform add android
-      - cordova build android --release
+      - name: Install Cordova
+        script: |
+          npm install -g cordova
+      - name: Add Android Platform
+        script: |
+          cordova platform rm android || true
+          cordova platform add android
+      - name: Build Android App
+        script: |
+          cordova build android --release
     artifacts:
-      - platforms/android/app/build/outputs/**/*.apk
-    publishing:
-      email:
-        recipients:
-          - zahammed991@gmail.com
-
+      - platforms/android/app/build/outputs/**/**/*.apk
